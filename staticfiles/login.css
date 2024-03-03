@@ -1,0 +1,16 @@
+.logo {
+    position: fixed;
+    top: 250px; /* Ajusta según sea necesario */
+    left: 500px;
+    max-width: 30%;
+    height: auto;
+}
+
+.letralogo {
+    font-family: 'Nombre de la fuente', sans-serif; /* Reemplaza 'Nombre de la fuente' con la fuente que desees utilizar */
+    font-size: 44px; /* Tamaño del texto */
+    font-weight: bold; /* Peso de la fuente (negrita) */
+    color: #5d9b9b ; /* Color del texto (puedes cambiar el código de color) */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra del texto */
+    /* Otras propiedades de estilo según tus preferencias */
+}

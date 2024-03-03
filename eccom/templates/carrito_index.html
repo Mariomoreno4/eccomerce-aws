@@ -1,0 +1,65 @@
+
+{% extends "index.html" %}
+
+
+{% block content %}
+<body>
+  <div class="alert alert-primary" role="alert">
+    {% if usuario.is_authenticated %}
+      <p>Bienvenido, {{ usuario.username }}</p>
+    {% endif %}
+  </div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h2 class="text-center">CARRITO</h2>
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">NOMBRE</th>
+              <th scope="col">PRECIO</th>
+              <th scope="col">CANTIDAD</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if request.session.carrito.items %}
+            {% for key, value in request.session.carrito.items %}
+            <tr>
+              <td>{{ value.nombre }}</td>
+              <td>{{ value.acumulado }}</td>
+              <td>
+                <span>{{ value.cantidad }}</span>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Cantidad">
+                  <a href="{% url 'Add' value.producto_id %}" class="btn btn-dark">+</a>
+                  <a href="{% url 'Sub' value.producto_id %}" class="btn btn-dark">-</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+              <td colspan="3">
+                <div class="alert alert-danger text-center">Sin Productos</div>
+              </td>
+            </tr>
+            {% endif %}
+            <tr>
+              <th scope="row">Total: $ {{total_carrito}}</th>
+              
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <div class="row text-center">
+          <a href="{% url 'CLS' %}" class="primary-btn order-submit">Limipiar</a>
+
+          
+          <a href="{% url 'orde' %}" class="primary-btn order-submit">Comprar</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+
+    {% endblock %}

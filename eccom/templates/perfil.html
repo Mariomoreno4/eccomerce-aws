@@ -1,0 +1,157 @@
+
+{% extends "index.html" %}
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+        background: linear-gradient(45deg, #0a0a0a, #ff0000);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+    
+    p {
+        color: black;
+    }
+    @keyframes gradientBG {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+
+    .social-btn-holder{
+      padding:10px;
+      margin-top:5px;
+      margin-bottom:5px;
+    }
+    .social-btn-holder .btn-social{
+      font-size:12px;
+      font-weight:bold;
+    }
+    
+    .btn-social{
+      color: white;
+      opacity:0.9;
+    }
+    .btn-social:hover {
+      color: white;
+      opacity:1;
+    }
+    .btn-facebook {
+    background-color: #3b5998;
+    }
+    .btn-twitter {
+    background-color: #00aced;
+    }
+    .btn-linkedin {
+    background-color:#0e76a8;
+    }
+    .btn-github{
+      background-color:#000000;
+    }
+    .btn-google {
+      background-color: #c32f10;
+    }
+    .btn-stackoverflow{
+      background-color: #D38B28;
+    }
+    
+    .btn-hackerrank{
+      background-color: #27AB5B;
+    }
+    .btn-soundcloud{
+      background-color: #FF7202;
+    }
+    
+    .centered-text{
+      text-align: center;
+    }
+    .custom-container {
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .welcome-msg {
+        text-align: center;
+        color: #333;
+    }
+    
+    .profile-info {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    .profile-info li {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+    
+    .profile-info li strong {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    .red-border {
+        border: 2px solid red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">    
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">  
+          <h4>User Profile</h4>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-12 col-sm-6">
+            {% if request.user.perfil.imagen_perfil %}
+              <img alt="User Pic" src="{{ request.user.perfil.imagen_perfil.url }}" id="profile-image1" class="img-circle img-responsive">
+            {% else %}
+              <img alt="User Pic" src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" id="profile-image1" class="img-circle img-responsive">
+            {% endif %}                     
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form.imagen_perfil }}
+              <button type="submit">Guardar cambios</button>
+            </form>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="container">
+              <h2>Bienvenido <span itemprop="name">{{usuario.username}}</span></h2>
+            </div>
+            <ul class="container details">
+              <li><p><span style="width:50px;"></span>-Edad: {{ perfil.edad }}</p></li>
+              <li><p><span style="width:50px;"></span>-Juego favorito: {{ perfil.juego_favorito }}</p></li>
+              <li><p><span style="width:50px;"></span>-Plataforma favorita: {{ perfil.plataforma_favorita }}</p></li>
+              <li><p><span style="width:50px;"></span>-Donde vive: {{ perfil.lugar_residencia }}</p></li>
+              <li><p><span style="width:50px;"></span>-Ventas Compradas: {{ perfil.ventas_compradas }}</p></li>
+              <li><p><span style="width:50px;"></span>-Genero: {{ perfil.sexo }}</p></li>
+              <li><p><span style="width:50px;"></span>-Genero Favorito: {{ perfil.genero }}</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
