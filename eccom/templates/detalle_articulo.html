@@ -420,7 +420,11 @@
 															<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
 														</div>
 													</div>
-													<button class="primary-btn" type="submit" articulo.id>Submit</button>
+													{% if request.user.is_authenticated %}
+													<button class="primary-btn" type="submit" articulo.id>Enviar</button>
+													{% else %}
+													<a  class="primary-btn" href="{% url 'register'  %}" class="add-to-cart-btn">Registrate<a>
+									               {% endif %}
 												</form>
 											</div>
 										</div>
