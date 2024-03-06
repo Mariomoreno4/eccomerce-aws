@@ -13,13 +13,15 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
 # Create your views here.
+from .forms import ReviewForm
 from eccom.carrito import Carrito
 from eccom.context_processor import total_carrito
 from eccom.models import producto
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 import uuid
-from django.urls import reverse
+from django.db.models import Count
+
 
 # Create your views here.
 def register(request):
@@ -103,10 +105,44 @@ def todo(request):
     return render(request, 'todos.html', {'articulos': articulos})
 
 def detalle_articulo(request, producto_id):
+    
     usuario = request.user
     carrito = Carrito(request)
     articulo = producto.objects.get(id=producto_id)
-    return render(request, 'detalle_articulo.html', {'articulo': articulo, 'usuario': usuario})
+    reviews = Review.objects.filter(product=articulo)  # Filtrar revisiones por el producto actual
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            rating = form.cleaned_data['rating']
+            review_text = form.cleaned_data['review_text']
+            review = Review.objects.create(user=user, product=articulo, rating=rating, review_text=review_text)
+            # Puedes redirigir a una página diferente después de agregar la reseña si es necesario
+            return redirect('detalle_articulo', producto_id=producto_id)
+    else:
+        form = ReviewForm()
+    ratings_count = {
+        '5': reviews.filter(rating=5).count(),
+        '4': reviews.filter(rating=4).count(),
+        '3': reviews.filter(rating=3).count(),
+        '2': reviews.filter(rating=2).count(),
+        '1': reviews.filter(rating=1).count(),
+    }
+        
+    paginator = Paginator(reviews, 5)  # 10 revisiones por página
+    page = request.GET.get('page')
+
+    try:
+        paginated_reviews = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_reviews = paginator.page(1)
+    except EmptyPage:
+        paginated_reviews = paginator.page(paginator.num_pages)
+
+
+    return render(request, 'detalle_articulo.html', {'articulo': articulo, 'usuario': usuario, 'form': form, 'reviews': reviews,'ratings_count': ratings_count,'paginated_reviews': paginated_reviews,
+})
 @login_required
 def carrito(request):
     usuario = request.user
@@ -372,3 +408,20 @@ def buscar_productox360(request):
         articulos = paginator.page(paginator.num_pages)
     # Pasa los resultados a la plantilla
     return render(request, 'todos.html', {'articulos': articulos})
+
+
+
+def agregar_review(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            product_id = request.POST.get('product_id')  # Asegúrate de tener un campo oculto en tu formulario que envíe el ID del producto
+            product = producto.objects.get(pk=product_id)
+            rating = form.cleaned_data['rating']
+            review_text = form.cleaned_data['review_text']
+            review = Review.objects.create(user=user, product=product, rating=rating, review_text=review_text)
+            return redirect('detalle_producto', producto_id=product_id)
+    else:
+        form = ReviewForm()
+    return render(request, 'tu_template.html', {'form': form})

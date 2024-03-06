@@ -58,4 +58,14 @@ class ordenes(models.Model):
     precio=models.FloatField(default=0)
     critic_score=models.FloatField(default=0)
     user_score=models.FloatField(default=0)
-    
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(producto, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    review_text = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Reseña de {self.user.username} para {self.product.nombre}'

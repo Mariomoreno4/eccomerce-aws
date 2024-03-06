@@ -16,6 +16,8 @@ urlpatterns = [
     path('buscarx360/', buscar_productox360, name='x360'),
     path('buscarwii/', buscar_productowii, name='wii'),
     
+    
+    
 
 
 

@@ -49,3 +49,5 @@ class PerfilUsuario(ImportExportModelAdmin):
 
 admin.site.unregister(User)  # Desregistras el User original
 admin.site.register(User, UserAdmin)  # Registras el User con tu UserAdmin personalizado
+
+admin.site.register(Review)
