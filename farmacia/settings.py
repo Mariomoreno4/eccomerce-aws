@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-&t@_#2&-i954r3203vd85yo01k#wpk_^e(+h+s3t$q_5=coioo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -82,15 +82,17 @@ WSGI_APPLICATION = 'farmacia.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-          'NAME': 'eccomerce-aws',
-          'HOST': 'localhost',
-          'PORT': '5432',
-          'USER': 'postgres',
-          'PASSWORD': 'iySS35igdCz'
-      }
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'postgres',
+        'USER':'postgres',
+        'PASSWORD':'123',
+        'HOST': 'localhost',
+        'PORT':'5433'
+        
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -126,7 +128,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/staticfiles/'
+STATIC_URL = '/static/'
 STATIC_ROOT=BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # Default primary key field type
