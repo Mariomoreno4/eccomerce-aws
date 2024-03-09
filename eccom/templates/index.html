@@ -57,7 +57,7 @@
 					<ul class="header-links pull-left">
 						<li><a href="#"><i class="fa fa-phone"></i> 6564121593</a></li>
 						<li><a href="#"><i class="fa fa-envelope-o"></i>al200936@alumnos.uacj</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+						
 					</ul>
 					<ul class="header-links pull-right">
 						
@@ -126,11 +126,11 @@
 								<a href="{% url 'fav' %}">
 									<i class="fa fa-heart-o"></i>
 									<a><span>Your Wishlist</span></a>
-									<div class="qty">2</div>
+									
 								</a>
 							</div>
 							<!-- /Wishlist -->
-
+                        
 							<!-- Cart -->
 							<div  class="dropdown">
 								<a>
@@ -138,9 +138,9 @@
 									{% if request.user.is_authenticated %}
 									<a href="{% url 'carrito' %}"><span>Your Cart</span></a>
 									{% else %}
-									<a href="#"><span>Your Cart</span></a>
+									<a href="{% url 'login' %}"><span>Your Cart</span></a>
 									{% endif %}
-									<div class="qty">3</div>
+									
 								</a>
 								<div class="cart-dropdown">
 									
@@ -284,7 +284,7 @@
 												
 										
 										
-												<h4 class="product-price">{{ articulo.precio }} <del class="product-old-price">$990.00</del></h4>
+												<h4 class="product-price">${{ articulo.precio }} MXN</h4>
 												<div class="product-rating">
 													{% if articulo.user_score <= 20 %}
     <i class="fa fa-star"></i>
@@ -310,14 +310,14 @@
 												</div>
 												<div class="product-btns">
 													
-														<a href="{% url 'agregar_favorito' articulo.id %}" class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></a>
+														<a href="{% url 'agregar_favorito' articulo.id %}" class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp"></span></a>
 												
 												
 													
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<a href="{% url 'detalle_articulo' articulo.id %}" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Ver detalles</a>
+												<a href="{% url 'detalle_articulo' articulo.id %}" class="add-to-cart-btn"><i ></i> Ver detalles</a>
 											</div>
 										</div>
 										<!-- /product -->
@@ -397,7 +397,7 @@
 												<p class="product-category">{{ articulo.categoria }} </p>
 												<p class="product-category">{{ articulo.platform }} </p>
 												<h3 class="product-name"><a href="{% url 'detalle_articulo' articulo.id %}">{{ articulo.nombre }}</a></h3>
-												<h4 class="product-price">$980.00 <del class="product-old-price">{{ articulo.precio }}</del></h4>
+												<h4 class="product-price">${{ articulo.precio }} MXN</h4>
 												<div class="product-rating">
 													{% if articulo.user_score <= 20 %}
     <i class="fa fa-star"></i>
@@ -422,12 +422,12 @@
 {% endif %}		
 												</div>
 												<div class="product-btns">
-													<a href="{% url 'agregar_favorito' articulo.id %}" class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></a>
+													<a href="{% url 'agregar_favorito' articulo.id %}" class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp"></span></a>
 													
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<a href="{% url 'detalle_articulo' articulo.id %}" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Ver detalles</a>
+												<a href="{% url 'detalle_articulo' articulo.id %}" class="add-to-cart-btn"><i ></i> Ver detalles</a>
 											</div>
 										</div>
 										<!-- /product -->

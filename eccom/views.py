@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import *
+from .forms import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render, HttpResponse, redirect
@@ -62,10 +63,20 @@ def exit(request):
     return redirect('/');
 def perfil(request):
     usuario = request.user
-    
     # Obtener el perfil del usuario actual
     perfil = PerfilUsuario.objects.get(usuario=usuario)
-    return render(request, 'perfil.html', {"perfil": perfil, 'usuario': usuario})
+    
+    if request.method == 'POST':
+        form = PerfilForm(request.POST, instance=perfil)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil actualizado correctamente.')
+
+            return redirect('perfil')
+    else:
+        form = PerfilForm(instance=perfil)
+    
+    return render(request, 'perfil.html', {"perfil": perfil, "form": form})
 def index(request):
     
     articulos = producto.objects.all()
@@ -114,12 +125,19 @@ def detalle_articulo(request, producto_id):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
-            user = request.user
-            rating = form.cleaned_data['rating']
-            review_text = form.cleaned_data['review_text']
-            review = Review.objects.create(user=user, product=articulo, rating=rating, review_text=review_text)
-            # Puedes redirigir a una página diferente después de agregar la reseña si es necesario
+         user = request.user
+         # Verificar si el usuario ya ha dejado una revisión para este producto
+         existing_review = Review.objects.filter(user=user, product=articulo).exists()
+         if existing_review:
+            # Mostrar un mensaje de error o redirigir con un mensaje indicando que el usuario ya ha revisado este producto
+            messages.error(request, "Ya has revisado este producto.")
             return redirect('detalle_articulo', producto_id=producto_id)
+        
+        rating = form.cleaned_data['rating']
+        review_text = form.cleaned_data['review_text']
+        review = Review.objects.create(user=user, product=articulo, rating=rating, review_text=review_text)
+        # Puedes redirigir a una página diferente después de agregar la reseña si es necesario
+        return redirect('detalle_articulo', producto_id=producto_id)
     else:
         form = ReviewForm()
     ratings_count = {
@@ -416,12 +434,21 @@ def agregar_review(request):
         form = ReviewForm(request.POST)
         if form.is_valid():
             user = request.user
-            product_id = request.POST.get('product_id')  # Asegúrate de tener un campo oculto en tu formulario que envíe el ID del producto
-            product = producto.objects.get(pk=product_id)
-            rating = form.cleaned_data['rating']
-            review_text = form.cleaned_data['review_text']
-            review = Review.objects.create(user=user, product=product, rating=rating, review_text=review_text)
-            return redirect('detalle_producto', producto_id=product_id)
+            product_id = request.POST.get('product_id')
+            product = get_object_or_404(producto, pk=product_id)
+            
+            # Verificar si el usuario ya ha dejado una reseña para este producto
+            existing_review = Review.objects.filter(user=user, product=product).exists()
+            
+            if not existing_review:
+                rating = form.cleaned_data['rating']
+                review_text = form.cleaned_data['review_text']
+                review = Review.objects.create(user=user, product=product, rating=rating, review_text=review_text)
+                return redirect('detalle_producto', producto_id=product_id)
+            else:
+                # Usuario ya ha dejado una reseña para este producto
+                # Puedes mostrar un mensaje de error o redirigirlos a otra página
+                return HttpResponse("Ya has dejado una reseña para este producto.")
     else:
         form = ReviewForm()
     return render(request, 'tu_template.html', {'form': form})

@@ -44,9 +44,9 @@
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					<li><a href="#"><i class="fa fa-phone"></i>6564121593</a></li>
+					<li><a href="#"><i class="fa fa-envelope-o"></i>al200936@alumnos.uacj</a></li>
+					
 				</ul>
 				<ul class="header-links pull-right">
 					
@@ -109,7 +109,7 @@
 								<a href="{% url 'fav' %}">
 									<i class="fa fa-heart-o"></i>
 									<a><span>Your Wishlist</span></a>
-									<div class="qty">2</div>
+									
 								</a>
 							</div>
 							<!-- /Wishlist -->
@@ -121,9 +121,9 @@
 									{% if request.user.is_authenticated %}
 									<a href="{% url 'carrito' %}"><span>Your Cart</span></a>
 									{% else %}
-									<a href="#"><span>Your Cart</span></a>
+									<a href="{% url 'login' %}"><span>Your Cart</span></a>
 									{% endif %}
-									<div class="qty">3</div>
+									
 								</a>
 								<div class="cart-dropdown">
 									
@@ -413,11 +413,11 @@
 													<div class="input-rating">
 														<span>Your Rating: </span>
 														<div class="stars">
-															<input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
-															<input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
-															<input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
-															<input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
-															<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+															<input id="star5" name="rating" value="5" type="radio" required><label for="star5"></label>
+															<input id="star4" name="rating" value="4" type="radio" required><label for="star4"></label>
+															<input id="star3" name="rating" value="3" type="radio" required><label for="star3"></label>
+															<input id="star2" name="rating" value="2" type="radio" required><label for="star2"></label>
+															<input id="star1" name="rating" value="1" type="radio" required><label for="star1"></label>
 														</div>
 													</div>
 													{% if request.user.is_authenticated %}
@@ -425,6 +425,13 @@
 													{% else %}
 													<a  class="primary-btn" href="{% url 'register'  %}" class="add-to-cart-btn">Registrate<a>
 									               {% endif %}
+												   {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 												</form>
 											</div>
 										</div>

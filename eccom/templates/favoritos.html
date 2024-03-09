@@ -15,75 +15,124 @@
     <link rel="stylesheet" type="text/css" href="{% static 'carrito.css' %}">
 </head
 {% block content %}>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .py-3,
+    .py-md-5 {
+        padding-top: -40rem !important;
+        padding-bottom: 3rem !important;
+    }
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+   
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -15px !important;
+        margin-left: -15px !important;
+    }
+    .col-md-12 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+    .shopping-cart {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    .cart-header {
+        margin-bottom: 20px;
+    }
+    .cart-header h4 {
+        margin: 0;
+        color: #333;
+    }
+    .cart-item {
+        border-top: 1px solid #ccc;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+    .product-name {
+        display: flex;
+        align-items: center;
+    }
+    .product-name img {
+        margin-right: 10px;
+        width: 50px;
+        height: 50px;
+    }
+    .price {
+        color: #666;
+    }
+    .add-to-cart-btn {
+        display: inline-block;
+        text-decoration: none;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+    }
+    .remove {
+        display: inline-block;
+    }
+    .remove a {
+        color: #dc3545;
+        text-decoration: none;
+    }
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+</style>
+</head>
 <body>
-
-    <div class="py-3 py-md-5 bg-light">
-        <div class="container">
-    
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="shopping-cart">
-
-                        <div class="cart-header d-none d-sm-none d-mb-block d-lg-block">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4>Favoritos</h4>
-                                </div>
-                                <div class="col-md-2">
-                                    <h4>Price</h4>
-                                </div>
-                                <div class="col-md-2">
-                                    <h4>Agregar al carro</h4>
-                                </div>
-                                <div class="col-md-2">
-                                    <h4>Remove</h4>
-                                </div>
+<div class="py-3 py-md-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="shopping-cart">
+                    <div class="cart-header">
+                        <h4>Favoritos</h4>
+                    </div>
+                    {% for producto in favoritos_usuario %}
+                    <div class="cart-item">
+                        <div class="row">
+                            <div class="col-md-6 my-auto">
+                                <a href="#">
+                                    <label class="product-name">
+                                        <img src="{{ producto.pic }}" alt="{{ producto.nombre }}">
+                                        {{ producto.nombre }}
+                                    </label>
+                                </a>
                             </div>
-                        </div>
-                        {% for producto in favoritos_usuario %}
-                        <div class="cart-item">
-                           
-                            <div class="row">
-                                
-                                <div class="col-md-6 my-auto">
-                                    <a href="">
-                                        <label class="product-name">
-                                            <img src="{{ producto.pic }}" style="width: 50px; height: 50px" alt="">
-                                            {{ producto.nombre }}
-                                        </label>
+                            <div class="col-md-2 my-auto">
+                                <label class="price">{{ producto.precio }}</label>
+                            </div>
+                            <div class="col-md-2 col-7 my-auto">
+                                <a href="{% url 'Add' producto.id %}" class="add-to-cart-btn">Comprar</a>
+                            </div>
+                            <div class="col-md-2 col-5 my-auto">
+                                <div class="remove">
+                                    <a href="{% url 'eliminar_favorito' producto.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Remove
                                     </a>
                                 </div>
-                                <div class="col-md-2 my-auto">
-                                    <label class="price">{{ producto.precio }}</label>
-                                </div>
-                                <div class="col-md-2 col-7 my-auto">
-                                    <a href="{% url 'Add' producto.id %}" class="add-to-cart-btn">Comprar<a>
-                                </div>
-                                <div class="col-md-2 col-5 my-auto">
-                                    <div class="remove">
-                                        <a href="{% url 'eliminar_favorito' producto.id %}" class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash"></i> Remove
-                                        </a>
-                                       
-                                    </div>
-                                    
-                                   
-                          </ul>
-                         
-          
-                                </div>
                             </div>
                         </div>
-                        {% endfor %}
-                     
                     </div>
+                    {% endfor %}
                 </div>
             </div>
-
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 </html>
 {% endblock %}
