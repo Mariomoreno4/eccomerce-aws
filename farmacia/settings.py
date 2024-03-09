@@ -82,17 +82,15 @@ WSGI_APPLICATION = 'farmacia.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'postgres',
-        'USER':'postgres',
-        'PASSWORD':'123',
-        'HOST': 'localhost',
-        'PORT':'5433'
-        
-    }
-}
-
+      'default': {
+          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'NAME': 'eccomerce-aws',
+          'HOST': 'localhost',
+          'PORT': '5432',
+          'USER': 'postgres',
+          'PASSWORD': 'YuKx4RwaMEj='
+      }
+  }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
