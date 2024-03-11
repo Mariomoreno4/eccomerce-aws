@@ -180,15 +180,136 @@
 				<!-- row -->
 				<div class="row">
 					<!-- ASIDE -->
-					<!-- aside Widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Juegos</h3>
-                        <div class="checkbox-filter">
-                            
-                        </div>
-                    </div>
+					<div id="aside" class="col-md-3">
+				<!-- aside Widget -->
+				<div class="aside">
+					<h3 class="aside-title">Categories</h3>
+					<div class="checkbox-filter">
+						{% with categorias=request.GET.getlist.categoria %}
+<form method="GET" action="{% url 'todo' %}">
+    <div class="checkbox-filter">
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-1" name="categoria" value="Aventura" {% if 'Aventura' in categorias %}checked{% endif %}>
+            <label for="category-1">
+                <span></span>
+                Aventura
+                <small>(120)</small>
+            </label>
+        </div>
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-2" name="categoria" value="Plataforma" {% if 'Plataforma' in categorias %}checked{% endif %}>
+            <label for="category-2">
+                <span></span>
+                Plataforma
+                <small>(740)</small>
+            </label>
+        </div>
+        <!-- Repite lo mismo para las otras categorías -->
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-3" name="categoria" value="Accion" {% if 'Accion' in categorias %}checked{% endif %}>
+            <label for="category-3">
+                <span></span>
+                Acción
+                <small>(1450)</small>
+            </label>
+        </div>
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-4" name="categoria" value="Estrategia" {% if 'Estrategia' in categorias %}checked{% endif %}>
+            <label for="category-4">
+                <span></span>
+                Estrategia
+                <small>(578)</small>
+            </label>
+        </div>
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-5" name="categoria" value="Deportivo" {% if 'Deportivo' in categorias %}checked{% endif %}>
+            <label for="category-5">
+                <span></span>
+                Deportivo
+                <small>(120)</small>
+            </label>
+        </div>
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-6" name="categoria" value="Terror" {% if 'Terror' in categorias %}checked{% endif %}>
+            <label for="category-6">
+                <span></span>
+                Terror
+                <small>(740)</small>
+            </label>
+        </div>
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-7" name="categoria" value="Rol" {% if 'Rol' in categorias %}checked{% endif %}>
+            <label for="category-7">
+                <span></span>
+                Rol
+                <small>(740)</small>
+            </label>
+        </div>
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-8" name="categoria" value="Musicales" {% if 'Musicales' in categorias %}checked{% endif %}>
+            <label for="category-8">
+                <span></span>
+                Musicales
+                <small>(740)</small>
+            </label>
+        </div>
+    </div>
+	<div class="aside">
+		<h3 class="aside-title">Consola</h3>
+		<div class="input-checkbox">
+			<input type="checkbox" id="console-1" name="platform" value="X360" {% if 'X360' in categorias %}checked{% endif %}>
+			<label for="console-1">
+				<span></span>
+				Xbox
+				<small>(740)</small>
+			</label>
+		</div>
+		<div class="input-checkbox">
+			<input type="checkbox" id="console-2" name="platform" value="PS3" {% if 'PS3' in categorias %}checked{% endif %}>
+			<label for="console-2">
+				<span></span>
+				Playstation
+				<small>(740)</small>
+			</label>
+		</div>
+		<div class="input-checkbox">
+			<input type="checkbox" id="console-3" name="platform" value="3DS" {% if '3DS' in categorias %}checked{% endif %}>
+			<label for="console-3">
+				<span></span>
+				Nintendo
+				<small>(740)</small>
+			</label>
+		</div>
+	</div>
+	<div class="aside">
+        <h3 class="aside-title">Price</h3>
+        <div class="price-filter">
+            <div id="price-slider"></div>
+            <div class="input-number price-min">
+                <input id="price-min" type="number" name="precio_min" value="{{ request.GET.precio_min }}">
+                <span class="qty-up">+</span>
+                <span class="qty-down">-</span>
+            </div>
+            <span>-</span>
+            <div class="input-number price-max">
+                <input id="price-max" type="number" name="precio_max" value="{{ request.GET.precio_max }}">
+                <span class="qty-up">+</span>
+                <span class="qty-down">-</span>
+            </div>
+        </div>
+    </div>
+	<br>
+    <button type="submit" class="primary-btn">Filtrar</button>
+</form>
+{% endwith %}
+						
+					</div>
+				</div>
+				<!-- /aside Widget -->
                     <!-- /aside Widget -->
-
+                    <!-- aside Widget -->
+						
+						<!-- /aside Widget -->
 
 						
 						<!-- /aside Widget -->
@@ -199,6 +320,7 @@
 
 					<!-- STORE -->
 					<div id="store" class="col-md-9">
+						<!-- store top filter -->
 						<!-- store top filter -->
 						
 						<!-- /store top filter -->
@@ -264,26 +386,19 @@
 
 						<!-- store bottom filter -->
 						<div class="store-filter clearfix">
-							<span class="store-qty">Showing 20-100 products</span>
+							<span class="store-qty">Mostrando {{ articulos.start_index }}-{{ articulos.end_index }} de {{ articulos.paginator.count }} productos</span>
 							<ul class="store-pagination">
 								{% if articulos.has_previous %}
-                                    <a href="?page=1">&laquo; Primero</a>
-                                    <a href="?page={{ articulos.previous_page_number }}">Anterior</a>
-                                {% endif %}
-                        
-                                <span class="current">
-                                    Página {{ articulos.number }} de {{ articulos.paginator.num_pages }}.
-                                </span>
-                        
-                                {% if articulos.has_next %}
-                                    <a href="?page={{ articulos.next_page_number }}">Siguiente</a>
-                                    <a href="?page={{ articulos.paginator.num_pages }}">Último &raquo;</a>
-                                {% endif %}
-                            </span>
+									<a href="?{{ request.GET.urlencode }}&page=1">&laquo; Primera</a>
+									<a href="?{{ request.GET.urlencode }}&page={{ articulos.previous_page_number }}">&lsaquo; Anterior</a>
+								{% endif %}
+								<span class="current">Página {{ articulos.number }} de {{ articulos.paginator.num_pages }}</span>
+								{% if articulos.has_next %}
+									<a href="?{{ request.GET.urlencode }}&page={{ articulos.next_page_number }}">Siguiente &rsaquo;</a>
+									<a href="?{{ request.GET.urlencode }}&page={{ articulos.paginator.num_pages }}">Última &raquo;</a>
+								{% endif %}
 							</ul>
 						</div>
-                    </div>
-						
 						<!-- /store bottom filter -->
 					</div>
 					<!-- /STORE -->

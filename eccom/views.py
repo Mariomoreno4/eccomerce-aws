@@ -92,28 +92,45 @@ def index(request):
 
 def todo(request):
     query = request.GET.get('q')
-    categoria = request.GET.get('categoria')  # Obtener el valor de la categoría seleccionada, si lo hay
-    
-    # Filtrar los productos por nombre, categoría o plataforma si hay una consulta de búsqueda
+    categorias = request.GET.getlist('categoria')
+    precio_min = request.GET.get('precio_min')
+    precio_max = request.GET.get('precio_max')
+    platforms= request.GET.getlist('platform')
+   
+
+    # Inicialmente, obtenemos todos los productos
+    articulos = producto.objects.all()
+
+    # Si hay una consulta de búsqueda, filtramos por nombre, categoría o plataforma
     if query:
-        articulos = producto.objects.filter(Q(nombre__icontains=query) | Q(categoria__icontains=query) | Q(platform__icontains=query))
-    else:
-        articulos = producto.objects.all()
-    
-    # Filtrar por categoría si se ha seleccionado una
-    if categoria and categoria != '0':
-        articulos = articulos.filter(categoria=categoria)  # Ajusta esto según tu modelo de Producto
-        
+        articulos = articulos.filter(Q(nombre__icontains=query) | Q(categoria__icontains=query) | Q(platform__icontains=query))
+
+    # Filtrar por categorías si se han seleccionado
+    if categorias:
+        articulos = articulos.filter(categoria__in=categorias)
+    if platforms:
+        articulos=articulos.filter(platform__in=platforms)
+
+    # Filtrar por precio si se han especificado precios mínimos o máximos
+    if precio_min:
+        articulos = articulos.filter(precio__gte=float(precio_min))
+    if precio_max:
+        articulos = articulos.filter(precio__lte=float(precio_max))
+
+    # Aplicar filtros de plataforma según lo seleccionado
+  
+
     paginator = Paginator(articulos, 6)
     page = request.GET.get('page')
+
     try:
         articulos = paginator.page(page)
     except PageNotAnInteger:
         articulos = paginator.page(1)
     except EmptyPage:
         articulos = paginator.page(paginator.num_pages)
-    
-    return render(request, 'todos.html', {'articulos': articulos})
+
+    return render(request, 'todos.html', {'articulos': articulos, 'request': request})
 
 def detalle_articulo(request, producto_id):
     
