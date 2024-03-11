@@ -131,7 +131,6 @@ def todo(request):
         articulos = paginator.page(paginator.num_pages)
 
     return render(request, 'todos.html', {'articulos': articulos, 'request': request})
-
 def detalle_articulo(request, producto_id):
     
     usuario = request.user
