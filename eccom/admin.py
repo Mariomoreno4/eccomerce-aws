@@ -36,7 +36,20 @@ class LibroResources(resources.ModelResource):
     class Meta:
         model=producto
         
-
+        
+class libroreviews(resources.ModelResource):
+    
+    fields={
+        'user',
+        'product',
+        'rating',
+        'review_text'
+           
+   
+    }
+    class Meta:
+        model=Review
+     
         
 @admin.register(producto)  
 class productos(ImportExportModelAdmin):
@@ -49,7 +62,10 @@ class PerfilUsuario(ImportExportModelAdmin):
 
 admin.site.unregister(User)  # Desregistras el User original
 admin.site.register(User, UserAdmin)  # Registras el User con tu UserAdmin personalizado
+@admin.register(Review)
+class Reviews(ImportExportModelAdmin):
+    resource_class=libroreviews
 
-admin.site.register(Review)
+
 
 admin.site.register(ordenes)
