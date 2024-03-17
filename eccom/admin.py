@@ -36,7 +36,7 @@ class LibroResources(resources.ModelResource):
     class Meta:
         model=producto
         
-        
+
         
 @admin.register(producto)  
 class productos(ImportExportModelAdmin):
@@ -51,3 +51,5 @@ admin.site.unregister(User)  # Desregistras el User original
 admin.site.register(User, UserAdmin)  # Registras el User con tu UserAdmin personalizado
 
 admin.site.register(Review)
+
+admin.site.register(ordenes)

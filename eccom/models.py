@@ -49,6 +49,7 @@ class favoritos(models.Model):
     
     
 class ordenes(models.Model):
+    usuario = models.ForeignKey(User, null=True,on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=0)
     nombre_producto = models.CharField(max_length=100,null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2,null=True)

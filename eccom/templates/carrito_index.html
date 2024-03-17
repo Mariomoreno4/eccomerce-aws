@@ -51,15 +51,19 @@
         </table>
         <hr>
         <div class="row text-center">
-          <a href="{% url 'CLS' %}" class="primary-btn order-submit">Limipiar</a>
+         
 
-          
+          {% if request.session.carrito.items %}  <!-- Verifica si el carrito no está vacío -->
           <a href="{% url 'orde' %}" class="primary-btn order-submit">Comprar</a>
+          <a href="{% url 'CLS' %}" class="primary-btn order-submit">Limipiar</a>
+          {% else %}
+          <a class="btn btn-secondary disabled" disabled>Comprar</a>  <!-- Deshabilita el botón si el carrito está vacío -->
+          {% endif %}
 
         </div>
       </div>
     </div>
   </div>
-  </body>
+</body>
 
     {% endblock %}

@@ -14,6 +14,14 @@
     flex-direction: column;
     margin-right: 20px; /* Espacio entre los campos */
   }
+  
+    #elementoOculto {
+        display: none;
+    }
+    #elementoOculto2 {
+        display: none;
+    }
+
 </style>
 <html>
 	<head>
@@ -36,7 +44,7 @@
               <img src="https://www.virtualvideogamestore.com/uploads/8/1/9/4/8194123/4282881_orig.gif" alt="">
           </div>
           <div class="container">
-              <h2 style="font-size: 24px;">Bienvenido <span itemprop="name">{{usuario.username}}</span></h2>
+              <h2 style="font-size: 24px;">Bienvenido <span itemprop="name">{{perfil.usuario}}</span></h2>
               <br>
               <h4>Tus datos:</h4>
               <ul class="details" style="margin-right: 20px;">
@@ -49,51 +57,116 @@
                   <li><p style="font-size: 18px;"><span style="width:50px;"></span>-Genero Favorito: {{ perfil.genero }}</p></li>
               </ul>
               <br>
-              <h4>ACTUALIZA TUS DATOS:</h4>
-              <form method="post" style="margin-left: 20px;">
-                  {% csrf_token %}
-                  <div > 
-                      EDAD:
-                      {{ form.edad }}
-                  </div>
-                  <br>
-                  <div>
-                      TU JUEGO FAVORITO:
-                      {{ form.juego_favorito }}
-                  </div>
-                  <br>
-                  <div  >
-                      TU PLATAFORMA FAVORITA:
-                      {{ form.plataforma_favorita }}
-                  </div>
-                  <br>
-                  <div>
-                      TU GENERO FAVORITO: 
-                      {{ form.genero }}
-                  </div>
-                  <br>
-                  <div >
-                      CUAL ES TU SEXO?
-                      {{ form.sexo }}
-                  </div>
-                  <br>
-                  <div>
-                      DONDE VIVES?: 
-                      {{ form.lugar_residencia }}
-                  </div>
-                  <br>
-                  <button type="submit">Guardar cambios</button>
-                  {% if messages %}
-                      {% for message in messages %}
-                          <div class="alert alert-success">
-                              {{ message }}
-                          </div>
-                      {% endfor %}
-                  {% endif %}
-              </form>
+              <button onclick="mostrarOcultarElemento2()"  class="primary-btn"> <h4>TU HISTORIAL</h4></button>
+              <div id="elementoOculto2">
+                <section id="tables">
+                    <div class="page-header">
+                      <h1>Historial de compras</h1>
+                    </div>
+                    
+                    <table class="table table-bordered table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Nombre del producto</th>
+                          <th>cantidad</th>
+                          <th>Plataforma</th>
+                        <th>categoria</th>
+                        <th>precio</th>
+                        </tr>
+                      </thead>
+                  
+                      {% for orden in ordenes_usuario %}
+                      <tbody>
+                        <tr>
+                          <td>{{orden.id}}</td>
+                          <td>{{ orden.nombre_producto }}</td>
+                          <td>{{ orden.cantidad }}</td>
+                          <td>{{ orden.platform }}</td>
+                          <td>{{ orden.categoria }}</td>
+                          <td>{{ orden.precio }}</td>
+                        </tr>
+                      </tbody>
+                    {% endfor %}
+                        
+                      </tbody>
+                    </table>
+                  </section>
+               
+
+              </div>
+              <br> <br> 
+              <button class="primary-btn" onclick="mostrarOcultarElemento()"> <h4 >ACTUALIZA TUS DATOS</h4></button>
+             
+    <div id="elementoOculto">
+        <form id="myForm" method="post" style="margin-left: 20px;">
+            {% csrf_token %}
+            <div> 
+                EDAD:
+                
+                {{ form.edad }}
+            </div>
+            <br>
+            <div>
+                TU JUEGO FAVORITO:
+                {{ form.juego_favorito }}
+            </div>
+            <br>
+            <div>
+                TU PLATAFORMA FAVORITA:
+                {{ form.plataforma_favorita }}
+            </div>
+            <br>
+            <div>
+                TU GENERO FAVORITO: 
+                {{ form.genero }}
+            </div>
+            <br>
+            <div>
+                CUAL ES TU SEXO?
+                {{ form.sexo }}
+            </div>
+            <br>
+            <div>
+                DONDE VIVES?: 
+                {{ form.lugar_residencia }}
+            </div>
+            <br>
+            <button id="submitButton" type="submit">Guardar cambios</button>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+    
+    <script>
+        function mostrarOcultarElemento() {
+            var elemento = document.getElementById("elementoOculto");
+            if (elemento.style.display === "none") {
+                elemento.style.display = "block"; // Cambia a "block" para que el elemento aparezca
+            } else {
+                elemento.style.display = "none"; // Cambia a "none" para que el elemento se oculte
+            }
+        }
+        function mostrarOcultarElemento2() {
+            var elemento = document.getElementById("elementoOculto2");
+            if (elemento.style.display === "none") {
+                elemento.style.display = "block"; // Cambia a "block" para que el elemento aparezca
+            } else {
+                elemento.style.display = "none"; // Cambia a "none" para que el elemento se oculte
+            }
+        }
+    </script>
+             
+              
           </div>
       </div>
   </div>
 	</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
+
 {% endblock %}

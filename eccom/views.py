@@ -65,18 +65,18 @@ def perfil(request):
     usuario = request.user
     # Obtener el perfil del usuario actual
     perfil = PerfilUsuario.objects.get(usuario=usuario)
-    
+    ordenes_usuario = ordenes.objects.filter(usuario=usuario)
+
     if request.method == 'POST':
         form = PerfilForm(request.POST, instance=perfil)
         if form.is_valid():
             form.save()
             messages.success(request, 'Perfil actualizado correctamente.')
-
             return redirect('perfil')
     else:
         form = PerfilForm(instance=perfil)
     
-    return render(request, 'perfil.html', {"perfil": perfil, "form": form})
+    return render(request, 'perfil.html', {"perfil": perfil, "form": form, "ordenes_usuario": ordenes_usuario})
 def index(request):
     
     articulos = producto.objects.all()
@@ -92,45 +92,47 @@ def index(request):
 
 def todo(request):
     query = request.GET.get('q')
+    
     categorias = request.GET.getlist('categoria')
     precio_min = request.GET.get('precio_min')
     precio_max = request.GET.get('precio_max')
-    platforms= request.GET.getlist('platform')
-   
+    platforms = request.GET.getlist('platform')
 
-    # Inicialmente, obtenemos todos los productos
+    # Obtener todos los productos
     articulos = producto.objects.all()
 
-    # Si hay una consulta de búsqueda, filtramos por nombre, categoría o plataforma
+    # Filtrar los productos según la consulta de búsqueda
     if query:
-        articulos = articulos.filter(Q(nombre__icontains=query) | Q(categoria__icontains=query) | Q(platform__icontains=query))
+        articulos = articulos.filter(Q(nombre__icontains=query) | Q(categoria__in=query) | Q(platform__icontains=query))
 
-    # Filtrar por categorías si se han seleccionado
+    # Filtrar por categorías si están presentes
     if categorias:
         articulos = articulos.filter(categoria__in=categorias)
-    if platforms:
-        articulos=articulos.filter(platform__in=platforms)
 
-    # Filtrar por precio si se han especificado precios mínimos o máximos
+    # Filtrar por precio si los valores mínimo y máximo están presentes
     if precio_min:
         articulos = articulos.filter(precio__gte=float(precio_min))
     if precio_max:
         articulos = articulos.filter(precio__lte=float(precio_max))
 
-    # Aplicar filtros de plataforma según lo seleccionado
-  
+    # Filtrar por plataforma si están presentes
+    if platforms:
+        articulos = articulos.filter(platform__in=platforms)
 
+    # Paginar los resultados
     paginator = Paginator(articulos, 6)
-    page = request.GET.get('page')
+    page_number = request.GET.get('page')
 
     try:
-        articulos = paginator.page(page)
+        page = paginator.page(page_number)
     except PageNotAnInteger:
-        articulos = paginator.page(1)
+        page = paginator.page(1)
     except EmptyPage:
-        articulos = paginator.page(paginator.num_pages)
+        page = paginator.page(paginator.num_pages)
+    
+     
 
-    return render(request, 'todos.html', {'articulos': articulos, 'request': request})
+    return render(request, 'todos.html', {'articulos': page, 'query': query,})
 def detalle_articulo(request, producto_id):
     
     usuario = request.user
@@ -211,15 +213,16 @@ def limpiar_carrito(request):
 
 
 def orde(request):
+    total_carrito_value = total_carrito(request)
     if request.method == 'POST':
         carrito = Carrito(request)
         if carrito.carrito:  # Verifica si hay elementos en el carrito
             for key, value in carrito.carrito.items():
                 plataforma = value['plataforma']
                 categoria = value['categoria']
-               
-               
-                
+                cantidad = value['cantidad']
+                acumulado=value['acumulado']
+                nombre_producto = value['nombre']
                 if categoria=="Aventura":
                     # Aumenta el contador correspondiente en el perfil del usuario
                     perfil_usuario, creado = PerfilUsuario.objects.get_or_create(usuario=request.user)
@@ -323,16 +326,26 @@ def orde(request):
                      perfil_usuario.conintendo = 0  # o cualquier otro valor predeterminado que desees
                     perfil_usuario.conintendo += 1
                     perfil_usuario.save()
+                
+                # Crea una instancia del modelo ordenes y guarda la orden en la base de datos
+                orden = ordenes.objects.create(
+                    usuario=request.user,  # Asocia la orden con el usuario actualmente autenticado
+                    cantidad=cantidad,
+                    nombre_producto=nombre_producto,
+                    platform=plataforma,
+                    categoria=categoria,
+                    precio=acumulado,  # Aquí debes establecer el precio según lo que corresponda en tu lógica
+                   
+                )
 
             # Limpia el carrito después de guardar los elementos en la base de datos
             carrito.limpiar()
 
-            return render(request,'confirmacion.html')
+            return render(request, 'confirmacion.html')
 
-    total_carrito_value = total_carrito(request)
+  
     
     host = request.get_host()
-    
   
     paypal_checkout = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
@@ -344,12 +357,10 @@ def orde(request):
     paypal_payment = PayPalPaymentsForm(initial=paypal_checkout)
 
     context = {
-        
         'paypal': paypal_payment,
-         
     }
     
-    return render(request,'orde.html',context)
+    return render(request, 'orde.html', context)
 def confirmacion(request):
     return render(request, "confirmacion.html")
 @login_required
