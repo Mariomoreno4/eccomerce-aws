@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-&t@_#2&-i954r3203vd85yo01k#wpk_^e(+h+s3t$q_5=coioo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -84,11 +84,11 @@ WSGI_APPLICATION = 'farmacia.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'postgres',
+        'NAME':'eccomerce-aws',
         'USER':'postgres',
-        'PASSWORD':'123',
+        'PASSWORD':'EkjR,a2m71A',
         'HOST': 'localhost',
-        'PORT':'5433'
+        'PORT':'5432'
         
     }
 }
